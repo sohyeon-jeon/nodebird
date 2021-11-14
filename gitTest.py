@@ -1,2 +1,0 @@
-print('gitTest');
-print('hihi');
