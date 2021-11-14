@@ -13,6 +13,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 const pageRouter = require('./routes/page');
 
+const {sequelize}=require('./models');
+
 const app = express();
 app.set('port', process.env.PORT || 8001);
 app.set('view engine', 'html');
@@ -20,6 +22,14 @@ nunjucks.configure('views', {
   express: app,
   watch: true,
 });
+
+sequelize.sync({force:false})
+.then(()=>{
+  console.log('데이터베이스 연결 성공');
+})
+.catch((err)=>{
+  console.error(err);
+})
 
 app.use(morgan('dev'));
 // static미들웨어는 정적인 파일을 제공하는 라우터 역할
