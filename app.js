@@ -14,6 +14,8 @@ const passport=require('passport');
 dotenv.config();
 const pageRouter = require('./routes/page');
 const authRouter=require('./routes/auth');
+const postRouter = require('./routes/post');
+const userRouter = require('./routes/user');
 
 const {sequelize}=require('./models');
 const passportConfig=require('./passport');
@@ -41,6 +43,7 @@ app.use(morgan('dev'));
 // 실제 서버 경로에는 public이 들어있지만, 요청주소는 public이 들어있지않음(보안상 좋음)
 app.use(express.static(path.join(__dirname, 'public')));
 //body-parser : 요청의 본문에 있는 데이터를 해석해서 req.body로 만들어주는 미들웨어
+app.use('/img', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 //app.use(cookieParser(비밀키))
@@ -61,6 +64,8 @@ app.use(passport.session());
 
 app.use('/', pageRouter);
 app.use('/auth',authRouter);
+app.use('/post', postRouter);
+app.use('/user', userRouter);
 
 app.use((req, res, next) => {
   const error =  new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
